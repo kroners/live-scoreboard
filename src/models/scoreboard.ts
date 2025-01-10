@@ -1,13 +1,14 @@
-export type Match = {
+export type MatchStatus = 'live' | 'finished';
+export type MatchModel = {
     id: string;
     homeTeam: string;
     awayTeam: string;
     homeScore: number;
     awayScore: number;
     date: Date;
-    status: 'live' | 'finished';
+    status: MatchStatus;
 };
 
-export type Scoreboard = {
-    matches: Match[];
+export type ScoreboardModel = {
+    matches: MatchModel[];
 };
