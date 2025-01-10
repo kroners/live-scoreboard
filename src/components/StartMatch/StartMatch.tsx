@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import { MatchModel } from '../../models/scoreboard';
 import { useMatches } from '../../App';
 
 const FormContainer = styled.div`
@@ -53,20 +52,14 @@ const Title = styled.h2`
   margin-bottom: 20px;
 `;
 
-interface StartMatchProps {
-  matches: MatchModel[];
-  onMatchesUpdate: (matches: MatchModel[]) => void;
-}
-
 const StartMatch: React.FC = () => {
   const [homeTeam, setHomeTeam] = useState('');
   const [awayTeam, setAwayTeam] = useState('');
-  const { matches, setMatches, scoreboardService } = useMatches();
+  const { startMatch } = useMatches();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    const newMatch = scoreboardService.startMatch(homeTeam, awayTeam);
-    setMatches([...matches, newMatch]);
+    startMatch(homeTeam, awayTeam);
     setHomeTeam('');
     setAwayTeam('');
   };

@@ -3,18 +3,19 @@ import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
 import StartMatch from './StartMatch';
 import { MatchesContext } from '../../App';
-import { ScoreboardService } from '../../service/scoreboardService';
 
 describe('StartMatch', () => {
-  const mockSetMatches = vi.fn();
-  const scoreboardService = new ScoreboardService();
+    const mockStartMatch = vi.fn();
+    const mockUpdateScore = vi.fn();
+    const mockFinishMatch = vi.fn();
 
   const wrapper = ({ children }: { children: React.ReactNode }) => (
     <MatchesContext.Provider 
       value={{ 
         matches: [], 
-        setMatches: mockSetMatches, 
-        scoreboardService 
+        startMatch: mockStartMatch, 
+        updateScore: mockUpdateScore,
+        finishMatch: mockFinishMatch
       }}
     >
       {children}
@@ -43,6 +44,6 @@ describe('StartMatch', () => {
     fireEvent.change(awayInput, { target: { value: 'Brazil' } });
     fireEvent.click(submitButton);
 
-    expect(mockSetMatches).toHaveBeenCalled();
+    expect(mockStartMatch).toHaveBeenCalled();
   });
 }); 

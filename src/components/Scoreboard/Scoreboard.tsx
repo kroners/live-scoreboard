@@ -21,7 +21,16 @@ const Title = styled.h1`
 
 const Scoreboard: React.FC = () => {
   const { matches } = useMatches();
-  const liveMatches = matches.filter(match => match.status === 'live');
+  const liveMatches = matches
+    .filter(match => match.status === 'live')
+    .sort((a, b) => {
+      const totalScoreA = a.homeScore + a.awayScore;
+      const totalScoreB = b.homeScore + b.awayScore;
+      if (totalScoreB !== totalScoreA) {
+        return totalScoreB - totalScoreA;
+      }
+      return b.date.getTime() - a.date.getTime();
+    });
 
   if (liveMatches.length === 0) return null;
 

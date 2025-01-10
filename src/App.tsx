@@ -20,8 +20,9 @@ const Title = styled.h1`
 
 interface MatchesContextType {
   matches: MatchModel[];
-  setMatches: (matches: MatchModel[]) => void;
-  scoreboardService: ScoreboardService;
+  startMatch: (homeTeam: string, awayTeam: string) => void;
+  updateScore: (matchId: string, homeScore: number, awayScore: number) => void;
+  finishMatch: (matchId: string) => void;
 }
 
 export const MatchesContext = createContext<MatchesContextType | undefined>(undefined);
@@ -36,10 +37,22 @@ export const useMatches = () => {
 
 const App: React.FC = () => {
   const [matches, setMatches] = useState<MatchModel[]>([]);
-  const [scoreboardService] = useState(new ScoreboardService());
+  const scoreboardService = new ScoreboardService();
+
+  const startMatch = (homeTeam: string, awayTeam: string) => {
+    setMatches(scoreboardService.startMatch(matches, homeTeam, awayTeam));
+  };
+
+  const updateScore = (matchId: string, homeScore: number, awayScore: number) => {
+    setMatches(scoreboardService.updateScore(matches, matchId, homeScore, awayScore));
+  };
+
+  const finishMatch = (matchId: string) => {
+    setMatches(scoreboardService.finishMatch(matches, matchId));
+  };
 
   return (
-    <MatchesContext.Provider value={{ matches, setMatches, scoreboardService }}>
+    <MatchesContext.Provider value={{ matches, startMatch, updateScore, finishMatch }}>
       <AppContainer>
         <Title>Live Football World Cup Scoreboard</Title>
         <StartMatch />

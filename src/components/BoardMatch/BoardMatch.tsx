@@ -44,13 +44,13 @@ interface BoardMatchProps {
 
 const BoardMatch: React.FC<BoardMatchProps> = ({ match }) => {
   return (
-    <MatchRow>
+    <MatchRow data-testid={`match-${match.id}`}>
       <TeamName>{match.homeTeam}</TeamName>
       <Score>{match.homeScore}</Score>
       <span>-</span>
       <Score>{match.awayScore}</Score>
       <TeamName>{match.awayTeam}</TeamName>
-      {match.status === 'live' && <LiveIndicator />}
+      {match.status === 'live' && <LiveIndicator data-testid="live-indicator" />}
     </MatchRow>
   );
 };

@@ -64,18 +64,16 @@ const Title = styled.h2`
 `;
 
 const MatchSummaryManager: React.FC = () => {
-  const { matches, setMatches, scoreboardService } = useMatches();
+  const { matches, updateScore, finishMatch } = useMatches();
 
   if (matches.length === 0) return null;
 
   const handleUpdateScore = (matchId: string, homeScore: number, awayScore: number) => {
-    scoreboardService.updateScore(matchId, homeScore, awayScore);
-    setMatches([...scoreboardService.getSummary()]);
+    updateScore(matchId, homeScore, awayScore);
   };
 
   const handleFinishMatch = (matchId: string) => {
-    scoreboardService.finishMatch(matchId);
-    setMatches([...scoreboardService.getSummary()]);
+    finishMatch(matchId);
   };
 
   return (
@@ -87,6 +85,7 @@ const MatchSummaryManager: React.FC = () => {
             <Th>Match</Th>
             <Th>Home Score</Th>
             <Th>Away Score</Th>
+            <Th>Status</Th>
             <Th>Actions</Th>
           </tr>
         </thead>
@@ -97,6 +96,7 @@ const MatchSummaryManager: React.FC = () => {
               <Td>
                 <ScoreInput
                   type="number"
+                  placeholder="Home Score"
                   value={match.homeScore}
                   onChange={(e) => handleUpdateScore(
                     match.id,
@@ -109,6 +109,7 @@ const MatchSummaryManager: React.FC = () => {
               <Td>
                 <ScoreInput
                   type="number"
+                  placeholder="Away Score"
                   value={match.awayScore}
                   onChange={(e) => handleUpdateScore(
                     match.id,
@@ -118,6 +119,7 @@ const MatchSummaryManager: React.FC = () => {
                   min="0"
                 />
               </Td>
+              <Td>{match.status}</Td>
               <Td>
                 <Button onClick={() => handleFinishMatch(match.id)}>
                   Finish Match
