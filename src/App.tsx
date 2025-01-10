@@ -1,25 +1,53 @@
-import React from 'react';
-import './App.css';
+import React, { useState, createContext, useContext } from 'react';
+import styled from 'styled-components';
+import StartMatch from './components/StartMatch/StartMatch';
 import Scoreboard from './components/Scoreboard/Scoreboard';
-import { MatchStatus } from './models/scoreboard';
+import MatchSummaryManager from './components/MatchSummaryManager/MatchSummaryManager';
+import { MatchModel } from './models/scoreboard';
+import { ScoreboardService } from './service/scoreboardService';
 
-function App() {
-  const      matches = [
-      {
-        id: '1',
-        homeTeam: 'France',
-        awayTeam: 'Germany',
-        homeScore: 2,
-        awayScore: 1,
-        date: new Date(),
-        status: 'live' as MatchStatus,
-      },
-    ];
-  return (
-    <div className="App">
-      <Scoreboard matches={matches} />
-    </div>
-  );
+const AppContainer = styled.div`
+  padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+`;
+
+const Title = styled.h1`
+  text-align: center;
+  color: #343a40;
+  margin-bottom: 30px;
+`;
+
+interface MatchesContextType {
+  matches: MatchModel[];
+  setMatches: (matches: MatchModel[]) => void;
+  scoreboardService: ScoreboardService;
 }
+
+export const MatchesContext = createContext<MatchesContextType | undefined>(undefined);
+
+export const useMatches = () => {
+  const context = useContext(MatchesContext);
+  if (!context) {
+    throw new Error('useMatches must be used within a MatchesProvider');
+  }
+  return context;
+};
+
+const App: React.FC = () => {
+  const [matches, setMatches] = useState<MatchModel[]>([]);
+  const [scoreboardService] = useState(new ScoreboardService());
+
+  return (
+    <MatchesContext.Provider value={{ matches, setMatches, scoreboardService }}>
+      <AppContainer>
+        <Title>Live Football World Cup Scoreboard</Title>
+        <StartMatch />
+        <Scoreboard />
+        <MatchSummaryManager />
+      </AppContainer>
+    </MatchesContext.Provider>
+  );
+};
 
 export default App;

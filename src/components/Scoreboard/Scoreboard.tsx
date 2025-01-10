@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
-import { ScoreboardModel } from '../../models/scoreboard';
-import  BoardMatch  from '../BoardMatch/BoardMatch';
+import { useMatches } from '../../App';
+import BoardMatch from '../BoardMatch/BoardMatch';
 
 const ScoreboardWrapper = styled.div`
   width: 100%;
@@ -19,11 +19,16 @@ const Title = styled.h1`
   margin-bottom: 20px;
 `;
 
-const Scoreboard: React.FC<ScoreboardModel> = ({ matches }) => {
+const Scoreboard: React.FC = () => {
+  const { matches } = useMatches();
+  const liveMatches = matches.filter(match => match.status === 'live');
+
+  if (liveMatches.length === 0) return null;
+
   return (
     <ScoreboardWrapper>
-      <Title>World Cup Scoreboard</Title>
-      {matches.map((match) => (
+      <Title>Live Matches</Title>
+      {liveMatches.map((match) => (
         <BoardMatch key={match.id} match={match} />
       ))}
     </ScoreboardWrapper>
