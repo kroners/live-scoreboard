@@ -1,6 +1,6 @@
 import React from 'react';
 import './App.css';
-import { Scoreboard } from './components/Scoreboard/Scoreboard';
+import Scoreboard from './components/Scoreboard/Scoreboard';
 import { MatchStatus } from './models/scoreboard';
 
 function App() {
